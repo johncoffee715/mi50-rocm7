@@ -1,5 +1,7 @@
 # Guia Completo: Instalar ROCm 7.0.2 na AMD MI50 para LocalLLaMA
 
+> 🇺🇸 [English Version](README.en.md) | 🇧🇷 Versão em Português
+
 Este repositório contém todos os arquivos necessários e um guia passo-a-passo completo para instalar o ROCm 7.0.2 em uma GPU AMD MI50 16GB/32GB, mesmo que a AMD tenha removido o suporte oficial para esta GPU nas versões mais recentes.
 
 ## 📋 Sobre a MI50
