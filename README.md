@@ -49,6 +49,9 @@ This repository contains:
 
 - `amdgpu-install_7.0.2.70002-1_all.deb` - Official ROCm 7.0.2 installer
 - `tensor-files/` - Directory with all necessary gfx906 tensor files (extracted from rocblas 6.4)
+- **`overclock/` — 🚀 Overclock guide and pp_table patches for Radeon Pro VII / MI50**  
+  Unlock up to **+24.7% core clock, +34% memory, +22% FP32 performance** via direct PowerPlay table patching. Includes pre-built patches (step1 through final 2120 MHz), analysis tools (`pp_table_explorer.py`), and boot persistence scripts.  
+  → [Read the overclock guide →](/overclock/README.md)
 
 ## 🚀 Step-by-Step Installation
 

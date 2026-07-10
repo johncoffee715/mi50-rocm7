@@ -1,0 +1,11 @@
+[Unit]
+Description=Aplicar overclock 2120MHz + TDP 350W na GPU AMD (Radeon Pro VII / MI50)
+After=multi-user.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/apply-gpu-patch.sh
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
