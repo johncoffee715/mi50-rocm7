@@ -1,10 +1,12 @@
 [Unit]
-Description=Aplicar overclock 2120MHz + TDP 350W na GPU AMD (Radeon Pro VII / MI50)
+Description=mi50-oc — Apply PowerPlay table tweaks for AMD Radeon Pro VII / MI50
 After=multi-user.target
+Before=lightdm.service gdm.service sddm.service
 
 [Service]
 Type=oneshot
-ExecStart=/usr/local/bin/apply-gpu-patch.sh
+ExecStartPre=/bin/bash -c 'while [ ! -f /sys/class/drm/card0/device/pp_table ]; do sleep 1; done'
+ExecStart=/usr/local/bin/mi50-apply-pp.sh /etc/mi50-oc/pp_table_active.bin
 RemainAfterExit=yes
 
 [Install]
