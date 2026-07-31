@@ -1,0 +1,12 @@
+[Unit]
+Description=GPU Performance Daemon v4 — rampa gradual de clocks MI50 (regra de ouro)
+After=multi-user.target
+
+[Service]
+Type=simple
+ExecStart=/home/johncoffee/mi50-oc/gpu-performance-daemon-v4.sh
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
