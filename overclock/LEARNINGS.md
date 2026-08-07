@@ -1,10 +1,34 @@
 # Learnings — Overclocking MI50 / Vega 20 (PP Tables)
 
-## 🚨 OCP (beep) era CORRENTE TOTAL, não o MCLK — TDP 300W resolve (2026-08-07)
-- **Fatos:** OCP (corte Vcore + beep) ocorreu com MCLK 1300 E 1200 a TDP 350W → NÃO é o MCLK; é a **corrente total puxada pelo VRM/PSU** no transiente.
-- **Fix:** **TDP 300W** (em vez de 350) reduz a puxada de corrente → evita OCP. v47 = SCLK 2070/MCLK 1200/**TDP 300W**.
-- **v47-FINAL (MD5 `b1a2c16e`):** persistido p/ boot. Rampa→auto no daemon (sem freeze) + TDP 300W (sem OCP).
-- **LIÇÃO:** em OC de GPU pro, o teto útil depende da curva TDP×corrente (PSU/VRM), não só do clock. Se beep, baixe TDP (não só o clock).
+## 🧱 WALL do SCLK a 100% sustentado (2026-08-07): 2060 freezou mesmo com UV/TDP baixos → 2000 é o teto útil
+- **Dados:** 2060 a 100% busy sustentou 12s+ com TDP 55W e temps 35/44°C (FRIAS) → **freeze** (gfx/wedged). Não térmico, não energia — **wall de silício** do SCLK alto em full load contínuo.
+- **Teto útil real = SCLK 2000** (v33 já sustentou inferência; v52 = 2000/1180/UV60/TDP300). 2060/2070/2100 = instáveis em full load sustentado.
+- **v52-FINAL (MD5 `128d7513`):** 2000/1180/UV60/TDP300, persistido até boot.
+- **LIÇÃO:** para esta placa, o wall de produção é ~2000; acima disso gera `gfx timeout` mesmo com o perfil termicamente/energeticamente seguro.
+
+## 🔬 TESTE A/B (2026-08-07): OCP/beep = OC; freeze acontece até em STOCK — suspeita do daemon manual
+- **Teste STOCK (sem OC):** NÃO beepou (o beep/OCP era o OC agravando corrente). Mas ainda **freeze** — não gfx.
+- **Separando:** beep/OCP = overclock (corrente); freeze = outro fator que persiste mesmo em stock.
+- **Suspeita principal do freeze:** o **daemon v4 força `perf_level=manual`** durante a rampa — e `manual` impede o escalonamento correto do ring (mesmo em stock) → freeze. Testar **daemon desligado + perf=auto + stock** para isolar.
+- **Não é sensor (37-41°C), não é stock-vb**. Ver se freeze some sem o daemon.
+
+## 🚨 SÍNTESE OCP (2026-08-07): beep/corte de Vcore INDEPENDE de MCLK/TDP — candidato
+- **Fatos:** OCP/beep ocorreu com MCLK 1300 e 1200, TDP 350 e 300 — **sempre**. Sensor junction normal (37-41°C, sem spike). Não é MCLK, não é TDP, não parece térmico.
+- **Interpretação:** quando QUALQUER carga alta puxa corrente, o VRM/PSU desta config corta (beep) — **limite físico de alimentação**, agravado com o CPU Xeon E5-2699v3 também carregado.
+- **TESTE decisivo pendente:** rodar o jogo com **perfil STOCK (sem OC)** — se beepar também, é 100% físico (VRM/PSU), não OC. Se não beepar com stock, o OC é o agravante e precisa reduzir ainda mais (ou undervolt).
+- **Não confundir:** este NÃO é o `gfx timeout` (silício) nem o sensor (térmico). É o padrão de energia.
+
+## 🔍 HIPÓTESE (usuário, 2026-08-07): OCP recorrente pode ser sensor/térmica falsa OU algoritmo do V-core
+- **Suspeita do usuário:** "hotspot ou alguma métrica está fazendo coisa errada no benchmark; vcore cortou + bip porque de novo". 
+- **Dados:** sensores normais em repouso (junction 41°C, limites 150/155). OCP (beep) NÃO loga no kernel (proteção VRM/PSU+). Não é TDP (350 fora), não é MCLK isolado.
+- **Candidatos ainda a isolar:** spike momentâneo do sensor hotspot/junction durante o buffer; algoritmo de proteção do VRM (Curte Vcore) sob transiente; comportamento do daemon rampa→auto.
+- **Próximo:** monitorar sensores a cada 1s durante benchmark; ver se há leitura anômala no instante do corte (não só estado de repouso). Se sensor disparar, reduzir/desligar via refs edge. Se não, problema de VRM/PSU física.
+
+## ✅ CORREÇÃO (2026-08-07): TDP NÃO é a causa do OCP/beep — informação anterior corrigida
+- **O usuário corrigiu:** TDP **nunca deu problema** neste sistema. A nota anterior ("TDP 300W resolve OCP") está **ERRADA e removida**.
+- **Fato real:** OCP (corte Vcore + beep) ocorreu com MCLK 1300 e 1200 a 350W — a causa exata AINDA não isolada (candidatos: transiente de corrente de memória sob display, VRM/PSU específicos, comportamento do sensor danificado). Não é TDP.
+- **Perfil escolhido (fixar):** SCLK 2070 / MCLK 1200 (+ daemon corrigido rampa→auto). TDP 350W permanece válido (nunca foi o problema).
+- **NÃO repetir:** usar TDP baixo como "fix" — não é a causa.
 
 ## 🚨 ROOT CAUSE REAL do OCP/beep: daemon (rampa) DESATIVADO — não o MCLK
 - **Fatos:** OCP (corte Vcore + beep) ocorreu com MCLK 1300 E com MCLK 1200. **Não é o MCLK.**

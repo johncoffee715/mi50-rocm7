@@ -331,12 +331,24 @@ SCLK ≤2050–2064 · SOCCLK ≤971 · FCLK ≤1180 · MaxVolt ≤4950 · TDP �
 - **VALIDAÇÃO 4K:** SCLK real atingiu 2060 (≈2070 alvo) em 4K tudo max — OC de núcleo comprovado. MCLK 1300 = teto p/ workload de memória (LLM/compute).
 - **Saga completa:** wall do silício ~2100; 2135/2150 instáveis (page fault). 2070 = doce de folga estável. Docs: LEARNINGS/ESTRATÉGIA/MÉTRICAS/CONTEXT + repo push.
 
-## ✅ FECHAMENTO FINAL 2026-08-07 — v47 (SCLK 2070 / MCLK 1200 / TDP 300W)
-- **Decisão usuário:** baixar TDP p/ 300W (não precisa 350). OCP/beep volta mesmo a 1200 com 350W → **TDP 300W reduz a puxada de corrente** (menos transiente).
-- **v47 (MD5 `b1a2c16e`):** SCLK 2070 + MCLK 1200 + TDP 300W + base (Thp150/refs edge+VRAM/volt stock). Persistido: sysfs + /etc + postboot + watchdog gate.
-- **Fatos acumulados:** OCP (beep) ocorreu com MCLK 1300 e 1200 a 350W — não era o MCLK; era a corrente total. TDP 300W é o limite que deve eliminar o OCP.
-- **Fluxo:** boot → postboot aplica v47 → daemon corrigido (rampa→auto). perf=auto em jogo.
-- **PRÓXIMO:** testar jogo com v47 (300W) — deve segurar 2070/1200 sem OCP e sem freeze.
+## ✅ FECHAMENTO FINAL 2026-08-07 — v48 (SCLK 2070 / MCLK 1200 / TDP 350W)
+- **CORREÇÃO (usuário):** TDP **nunca deu problema**. A nota anterior "TDP 300W resolve" é ERRADA. TDP 350W é válido.
+- **Perfil final:** SCLK **2070** + MCLK **1200** + TDP **350W** (não mexer) + base (Thp150/refs edge+VRAM/volt stock).
+- **OCP/beep:** causa AINDA não isolada — não é TDP, não é MCLK isolado. Candidatos: transiente de memória sob display, VRM/PSU, sensor. Monitorar.
+- **Fluxo:** boot → postboot aplica perfil → daemon corrigido (rampa→auto). perf=auto em jogo.
+- **PRÓXIMO:** testar jogo; se OCP persistir, investigar transiente de memória/VRM (não TDP).
+
+## 🏁 PERFIL FINAL v51 (2026-08-07) — SCLK 2060 / MCLK 1180 / UV−60mV / TDP 300W
+- **v51 (MD5 `405b39cf`):** SCLK 2060 · MCLK 1180 · **UV −60mV** (MaxVoltageGfx 4410) · ThotspotLimit 150 (métrica desconsiderada como ref) · throttle refs = **edge 100 + VRAM 94** · **TDP 300W** (economia).
+- **Persistido:** sysfs + /etc + postboot + watchdog gate (`405b39cf`). perf=auto em jogo.
+- **Escolha do usuário:** UV60 + hotspot desconsiderado + refs edge/VRAM + TDP300 = perfil econômico e termicamente amigável.
+- **PRÓXIMO:** testar em jogo — deve subir 2060/1180 com UV (menos calor) + TDP 300 (menos corrente) → sem OCP/beep e sem freeze.
+
+## 🏁 PERFIL FIXO ATÉ BOOT — v52 (2026-08-07): SCLK 2000 / MCLK 1180 / UV60 / TDP300
+- **v52 (MD5 `128d7513`):** SCLK **2000** / MCLK **1180** / UV −60mV (4410) / TDP **300W** / hotspot150 (ref desconsiderada) / refs edge+VRAM. FIXADO até boot.
+- **Por quê 2000:** 2060 freezou a 100% sustentado mesmo com UV/TDP300 (TDP 55W, temps 44°C — NÃO térmico nem energia; é wall de silício). 2000 = degrau que a inferência já sustentou.
+- **Persistido:** sysfs + /etc + postboot + watchdog gate (`128d7513`). perf=auto. Cada reboot reaplica v52.
+- **PRÓXIMO:** testar jogo full load com 2000 — deve sustentar sem freeze. Se ok, é o definitivo. Docs+repo pendentes.
 
 ## Metrics
 [Metrics] Phase: 1 (descoberta) | Route: COMPLEX/CRITICAL | Status: success (pesquisas) / skipped (diag timeout)
