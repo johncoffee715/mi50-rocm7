@@ -65,8 +65,11 @@ Boot (PowerPlay + amdgpu.ppfeaturemask=0xffffffff)
 | v33 | 2000 | `3a66640f` |
 | v35 | 2100 | `d891907d` |
 | **v36** | **2150 (teto SCLK)** | `7e9cc1e4` |
+| v41 | 2200 ❌ freeze | — |
 
-**MCLK (homeopatia pós-SCLK teto):**
+**MCLK (homeopatia pós-SCLK teto):** v37 1100 → v39 1150 → v40 1200 (teto HBM2).
+
+**🇼 v42-FINAL (perfil máximo ESTÁVEL):** SCLK **2150** + MCLK **1200** + base v29 → MD5 `cb430b3f`. (2200 congelou = wall do silício; 2150 estável.)
 | v37 | 2100 | 1100 | `e8d7dafa` |
 | v38 → | 2100 | 1150→1200 | — |
 

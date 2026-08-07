@@ -23,6 +23,11 @@
 | **v37** | 2100 | **1100** | `e8d7d5fa` | ✅ aplicado, topo MCLK=1100 aceito |
 | v39 | 2100 | 1150 | `e31e082a` | ✅ topo MCLK=1150 |
 | **v40** | 2100 | **1200 (teto HBM2)** | `22430f05` | ✅ topo MCLK=1200 |
+| **v42-FINAL** | **2150** | **1200** | `cb430b3f` | ✅ **perfil máximo ESTÁVEL** |
+
+## ⚠️ WALL do silício (estudo causa-efeito)
+- **v41 SCLK 2200** = ❌ freeze (hang duro, sem log). Não térmico (34/40/33°C) nem TDP; é **limite do silício Vega 20**.
+- **TETO**: SCLK 2150 estável; 2200 instável. **v42-final = 2150/1200**.
 
 ## Snapshot de métricas — v36 (SCLK 2150), 2026-08-07 00:44
 
