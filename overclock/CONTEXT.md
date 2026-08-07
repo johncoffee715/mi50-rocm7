@@ -350,6 +350,12 @@ SCLK ≤2050–2064 · SOCCLK ≤971 · FCLK ≤1180 · MaxVolt ≤4950 · TDP �
 - **Persistido:** sysfs + /etc + postboot + watchdog gate (`128d7513`). perf=auto. Cada reboot reaplica v52.
 - **PRÓXIMO:** testar jogo full load com 2000 — deve sustentar sem freeze. Se ok, é o definitivo. Docs+repo pendentes.
 
+## 🏁 PERFIL FIXO 2026-08-07 (FINAL) — v53: SCLK 2060 / MCLK 1180 / UV60 / TDP300
+- **v53 (MD5 `405b39cf`):** SCLK **2060** / MCLK **1180** / UV −60mV (4410) / TDP **300W** / hotspot150 (ref desconsiderada) / refs edge+VRAM. FIXADO até boot.
+- **Persistido:** sysfs + /etc + postboot + watchdog gate (`405b39cf`). perf=auto. Todo reboot reaplica v53.
+- **Nota:** 2060 freezou a 100% sustentado em teste anterior (TDP 55W, temps 44°C — wall de silício). Usuário decidiu fixar 2060 mesmo assim (é o max que ele quer; wall de burst ok).
+- **PRÓXIMO:** testar em jogo; se freeze, volta p/ 2000 (v52). Docs + repo atualizados.
+
 ## Metrics
 [Metrics] Phase: 1 (descoberta) | Route: COMPLEX/CRITICAL | Status: success (pesquisas) / skipped (diag timeout)
 [Metrics] Phase: 2 (contrato) | Route: COMPLEX/CRITICAL | Status: skipped (decisão do usuário — dump + SPEC pulados)
