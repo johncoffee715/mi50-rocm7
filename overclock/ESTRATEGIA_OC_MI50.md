@@ -64,10 +64,13 @@ Boot (PowerPlay + amdgpu.ppfeaturemask=0xffffffff)
 | v32 | 1950 | `30a4271f` |
 | v33 | 2000 | `3a66640f` |
 | v35 | 2100 | `d891907d` |
-| **v36** | **2150 (ativo — teto máx)** | `7e9cc1e4` |
-| v37+ (próximo) | MCLK 1100+ (homeopatia) | — |
+| **v36** | **2150 (teto SCLK)** | `7e9cc1e4` |
 
-**Doses:** sempre elevar SCLK em ~50MHz (1700→1850→1900→1950→2000→2050→2100→2150), validando alto (`pp_dpm_sclk` nível 8 = alvo, dmesg sem erros, mclk NÃO preso em 350), aplicando pós-boot.
+**MCLK (homeopatia pós-SCLK teto):**
+| v37 | 2100 | 1100 | `e8d7dafa` |
+| v38 → | 2100 | 1150→1200 | — |
+
+**Doses:** sempre elevar SCLK em ~50MHz (1700→1850→1900→1950→2000→2050→2100→2150), validando alto (`pp_dpm_sclk` nível 8 = alvo, dmesg sem erros, mclk NÃO preso em 350), aplicando pós-boot. Depois MCLK em 50MHz.
 
 ---
 

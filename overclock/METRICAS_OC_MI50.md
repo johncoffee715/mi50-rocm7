@@ -13,7 +13,16 @@
 | v33 | 2000 | `3a66640f` | ✅ inferência ok |
 | v34 | 2050 | `0624f954` | ✅ |
 | v35 | 2100 | `d891907d` | ✅ teste ok |
-| **v36** | **2150 (teto máx)** | `7e9cc1e4` | ✅ teste ok |
+| **v36** | **2150 (teto SCLK)** | `7e9cc1e4` | ✅ teste ok |
+
+## Escalada de MCLK (homeopatia, após SCLK teto)
+
+| Perfil | SCLK | MCLK | MD5 | Validação |
+|---|---|---|---|---|
+| base | 1700 | 1000 | `754da772` | ✅ |
+| **v37** | 2100 | **1100** | `e8d7d5fa` | ✅ aplicado, topo MCLK=1100 aceito |
+| v38 (próx) | 2100 | 1150 | — | — |
+| v39 (próx) | 2100 | 1200 | — | — |
 
 ## Snapshot de métricas — v36 (SCLK 2150), 2026-08-07 00:44
 
