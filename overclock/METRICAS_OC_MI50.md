@@ -62,3 +62,8 @@ ERROS amdgpu: nenhum (dmesg limpo)
 | Tabela DPM nível 8 | = SCLK alvo | o "segredo" — rampa 0→8 |
 | daemon v4 | enabled | rampa gradual (anti-bug) |
 | aplicação | pós-boot | nunca no boot |
+
+## 🏁 PERFIL DEFINITIVO (2026-08-07)
+- **`pp_table_final_estavel_2100_1200.bin`** — MD5 `22430f05870975e3aee62503a85e113f`
+- SCLK 2100 / MCLK 1200 / TDP 350 / Thp150 / refs edge+VRAM / volt stock
+- ESTÁVEL em jogo com `perf_level=AUTO`. 2135/2150 = page fault+gfx timeout (descartado).
