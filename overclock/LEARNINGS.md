@@ -1,5 +1,11 @@
 # Learnings — Overclocking MI50 / Vega 20 (PP Tables)
 
+## 🚨 OCP (beep) era CORRENTE TOTAL, não o MCLK — TDP 300W resolve (2026-08-07)
+- **Fatos:** OCP (corte Vcore + beep) ocorreu com MCLK 1300 E 1200 a TDP 350W → NÃO é o MCLK; é a **corrente total puxada pelo VRM/PSU** no transiente.
+- **Fix:** **TDP 300W** (em vez de 350) reduz a puxada de corrente → evita OCP. v47 = SCLK 2070/MCLK 1200/**TDP 300W**.
+- **v47-FINAL (MD5 `b1a2c16e`):** persistido p/ boot. Rampa→auto no daemon (sem freeze) + TDP 300W (sem OCP).
+- **LIÇÃO:** em OC de GPU pro, o teto útil depende da curva TDP×corrente (PSU/VRM), não só do clock. Se beep, baixe TDP (não só o clock).
+
 ## 🚨 ROOT CAUSE REAL do OCP/beep: daemon (rampa) DESATIVADO — não o MCLK
 - **Fatos:** OCP (corte Vcore + beep) ocorreu com MCLK 1300 E com MCLK 1200. **Não é o MCLK.**
 - **Causa real:** o **daemon v4 (rampa gradual) estava INACTIVE**. Sem a rampa, a subida de corrente é abrupta → OCP/beep. O GOLDEN_RULES sempre disse: **daemon OBRIGATÓRIO**.

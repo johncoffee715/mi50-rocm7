@@ -331,6 +331,13 @@ SCLK ≤2050–2064 · SOCCLK ≤971 · FCLK ≤1180 · MaxVolt ≤4950 · TDP �
 - **VALIDAÇÃO 4K:** SCLK real atingiu 2060 (≈2070 alvo) em 4K tudo max — OC de núcleo comprovado. MCLK 1300 = teto p/ workload de memória (LLM/compute).
 - **Saga completa:** wall do silício ~2100; 2135/2150 instáveis (page fault). 2070 = doce de folga estável. Docs: LEARNINGS/ESTRATÉGIA/MÉTRICAS/CONTEXT + repo push.
 
+## ✅ FECHAMENTO FINAL 2026-08-07 — v47 (SCLK 2070 / MCLK 1200 / TDP 300W)
+- **Decisão usuário:** baixar TDP p/ 300W (não precisa 350). OCP/beep volta mesmo a 1200 com 350W → **TDP 300W reduz a puxada de corrente** (menos transiente).
+- **v47 (MD5 `b1a2c16e`):** SCLK 2070 + MCLK 1200 + TDP 300W + base (Thp150/refs edge+VRAM/volt stock). Persistido: sysfs + /etc + postboot + watchdog gate.
+- **Fatos acumulados:** OCP (beep) ocorreu com MCLK 1300 e 1200 a 350W — não era o MCLK; era a corrente total. TDP 300W é o limite que deve eliminar o OCP.
+- **Fluxo:** boot → postboot aplica v47 → daemon corrigido (rampa→auto). perf=auto em jogo.
+- **PRÓXIMO:** testar jogo com v47 (300W) — deve segurar 2070/1200 sem OCP e sem freeze.
+
 ## Metrics
 [Metrics] Phase: 1 (descoberta) | Route: COMPLEX/CRITICAL | Status: success (pesquisas) / skipped (diag timeout)
 [Metrics] Phase: 2 (contrato) | Route: COMPLEX/CRITICAL | Status: skipped (decisão do usuário — dump + SPEC pulados)
