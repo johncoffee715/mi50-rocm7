@@ -98,3 +98,8 @@ Boot (PowerPlay + amdgpu.ppfeaturemask=0xffffffff)
 
 ## 7. Referências
 - kernel.org docs amdgpu/thermal, ROCm#463, igorsLAB "The Wall", TechPowerUP R9 VII, 3dnews.ru, Guru3D, Reddit r/linux_gaming + r/overclocking, CachyOS forum.
+## 🏁 PERFIL DEFINITIVO (2026-08-07)
+- **`pp_table_v44_final_2070_1300.bin`** — MD5 `b569a0aff9db9d7b8f7e295484414d5d`
+- SCLK **2070** + MCLK **1300** (fixado) + base v29 (TDP350/Thp150/refs edge+VRAM/volt stock)
+- Validado 4K max: SCLK real **2060**. MCLK 1300 = teto de memória (LLM/compute).
+- Aplicar pós-boot + `perf=AUTO` em jogo. (2135/2150 descartados: page fault.)

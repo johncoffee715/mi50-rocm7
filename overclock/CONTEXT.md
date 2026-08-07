@@ -313,6 +313,12 @@ SCLK ≤2050–2064 · SOCCLK ≤971 · FCLK ≤1180 · MaxVolt ≤4950 · TDP �
 - **CONCLUSÃO:** SCLK OC = ótimo em 4K (2060 real). MCLK alto só via workload de memória (LLM/compute), não game GFX.
 - **PRÓXIMO:** decidir perfil definitivo (2075 ok p/ SCLK; MCLK 1300 como teto de compute); consolidar docs + push repo.
 
+## 🏁 PERFIL DEFINITIVO 2026-08-07 — v44-FINAL (SCLK 2070 / MCLK 1300)
+- **v44-FINAL (MD5 `b569a0af`):** SCLK **2070** + MCLK **1300** fixado, base v29 (TDP350/Thp150/refs edge+VRAM/volt stock).
+- **Aplicado ao vivo + persistido:** sysfs + /etc + service postboot (→ v44) + watchdog gate (`b569a0af`). perf=auto em jogo.
+- **VALIDAÇÃO 4K:** SCLK real atingiu 2060 (≈2070 alvo) em 4K tudo max — OC de núcleo comprovado. MCLK 1300 = teto p/ workload de memória (LLM/compute).
+- **Saga completa:** wall do silício ~2100; 2135/2150 instáveis (page fault). 2070 = doce de folga estável. Docs: LEARNINGS/ESTRATÉGIA/MÉTRICAS/CONTEXT + repo push.
+
 ## Metrics
 [Metrics] Phase: 1 (descoberta) | Route: COMPLEX/CRITICAL | Status: success (pesquisas) / skipped (diag timeout)
 [Metrics] Phase: 2 (contrato) | Route: COMPLEX/CRITICAL | Status: skipped (decisão do usuário — dump + SPEC pulados)
