@@ -1,5 +1,28 @@
 # Learnings — Overclocking MI50 / Vega 20 (PP Tables)
 
+## 🚨 OCP = beep/corte de Vcore no MCLK 1300 — teto seguro = 1200 (2026-08-07)
+- **MCLK 1300 (v44) em workload:** **corte de Vcore + beep** = OCP (OverCurrent Protection) do VRM/PSU — proteção de ENERGIA, não silício (diferente dos `gfx timeout`). Não loga no kernel.
+- **Limite físico:** MCLK acima de 1200 puxa corrente demais no transiente → VRM/PSU corta. **Teto seguro de memória = 1200** (validado sem OCP).
+- **v45-FINAL (MD5 `05424761`):** SCLK **2070** (validado 2060 real em 4K) + MCLK **1200** (teto sem OCP). Persistido pós-boot + perf=AUTO.
+
+## 📊 PICO do "santo graal" medido (2026-08-07): 2100 + memB 64% + TDP 266W + junction 94°C — transitório
+- **Dados no jogo (VRAM livre, 2100/1200, perf=auto):** busy 100%, **TDP 266W**, **memB 56–64%**, edge 43–45°C, **junction 91–94°C** no pico → freeze TRANSITÓRIO que o sistema recuperou (dmesg limpo, uptime 15min).
+- **Interpretação:** 2100 sustenta GFX+memória juntos (santo graal parcial), mas em pico (266W + junction alta do sensor danificado) ocorre um transitório breve que auto-recupera.
+- **Opções:** (A) aceitar 2100 (recupera sozinho); (B) **reduzir p/ 2050** p/ folga e eliminar transitórios; (C) limite de potência mais baixo p/ pico menos agressivo.
+- **Sinal de warning:** junction ~91–94°C (sensor danificado) + TDP >260W = zona de transitório.
+
+## 🧠 MCLK NÃO segura em 1200 com display ativo — só via banda de memória real
+- **Teste manual:** `sclk=8` (2100) SEGURA ✅; `mclk=2` (1200) **volta a 350/800** ❌ com display ativo e `mem_busy=0`.
+- **Causa:** o driver segura o MCLK no piso com display ativo para evitar **reclock/obfsco durante vblank** (`mclk_switching`). O MCLK só subir além do piso com **demanda de memória (`mem_busy%` alto)** — compute/inferência/LLM, não jogo GFX com display.
+- **Consequência:** em jogo com display, só o **SCLK overclock sustenta** (2100). O **MCLK 1200 é alcançável em workload de memória** (inferência), não em GFX-only.
+- **Não há perfil que force** MCLK alto: o driver não aceita MCLK fixo no topo com display/banda-baixa. Livr-se ao workload real.
+
+## 🧠 MCLK "travado em 800" NÃO é trava — é demanda seletiva de memória
+- Em jogo GFX-heavy, o SCLK sobe (2150) mas MCLK fica em 800. Não é defeito: o **MCLK só escala com demanda real de transferência/memória** (compute/ROCm/LLM/inferência). Jogo GFX usa mais shader que bandwidth.
+- **MCLK 1200 é atingível e estável** sob workload de memória (compute), não em títulos GFX-only.
+- **Não forçar `2 > pp_dpm_mclk` sem carga** — retorna a auto; suba via workload real.
+- Perfil define o topo (2150/1200); a workload decide o que escala (steep). Santo graal = workload que exige ambos.
+
 ## ✅ FECHAMENTO DEFINITIVO (2026-08-07): WALL = SCLK 2100. 2135/2150 causam page fault + gfx timeout
 - **Teste 2135/1200 (perf=AUTO):** 40s de burst ok (TDP 75W), mas **`gfxhub0 no-retry page fault` + `ring gfx timeout` → wedged** em sessão real (1901s). NÃO estável.
 - **Teste 2150/1200:** `ring gfx timeout` + wedged (1066s/1389s). NÃO estável.

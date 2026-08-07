@@ -103,3 +103,8 @@ Boot (PowerPlay + amdgpu.ppfeaturemask=0xffffffff)
 - SCLK **2070** + MCLK **1300** (fixado) + base v29 (TDP350/Thp150/refs edge+VRAM/volt stock)
 - Validado 4K max: SCLK real **2060**. MCLK 1300 = teto de memória (LLM/compute).
 - Aplicar pós-boot + `perf=AUTO` em jogo. (2135/2150 descartados: page fault.)
+
+## 🏁 PERFIL FINAL DEFINITIVO (2026-08-07)
+- **`pp_table_v45_final_2070_1200.bin`** — MD5 `05424761d4fc8993706bb9c7aa069300`
+- SCLK **2070** + MCLK **1200** (teto sem OCP; 1300 = beep/corte de Vcore)
+- Validado 4K: SCLK real 2060. Aplicar pós-boot + perf=AUTO.

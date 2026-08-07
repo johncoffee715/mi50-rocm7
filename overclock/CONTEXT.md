@@ -1,3 +1,9 @@
+## 🏁 PERFIL FINAL DEFINITIVO 2026-08-07 — v45 (SCLK 2070 / MCLK 1200)
+- **v45-FINAL (MD5 `05424761d4fc8993706bb9c7aa069300`):** SCLK 2070 (validado 2060 real 4K) + MCLK **1200** (teto seguro — 1300 deu OCP/beep).
+- **OCP aprendido:** MCLK 1300 → corte Vcore + beep (proteção de energia VRM/PSU). Teto memória = 1200.
+- **Persistido:** sysfs + /etc + postboot + watchdog gate `05424761`. perf=auto em jogo.
+- **SAGA FECHADA:** 2070/1200 = estável produção (sem OCP, sem page fault). Docs + repo.
+
 # CONTEXT.md — Working Memory do Pipeline MIX/CRITICAL
 
 ## Missão
