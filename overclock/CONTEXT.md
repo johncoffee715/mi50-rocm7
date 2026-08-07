@@ -356,8 +356,21 @@ SCLK ≤2050–2064 · SOCCLK ≤971 · FCLK ≤1180 · MaxVolt ≤4950 · TDP �
 - **Nota:** 2060 freezou a 100% sustentado em teste anterior (TDP 55W, temps 44°C — wall de silício). Usuário decidiu fixar 2060 mesmo assim (é o max que ele quer; wall de burst ok).
 - **PRÓXIMO:** testar em jogo; se freeze, volta p/ 2000 (v52). Docs + repo atualizados.
 
-## Metrics
-[Metrics] Phase: 1 (descoberta) | Route: COMPLEX/CRITICAL | Status: success (pesquisas) / skipped (diag timeout)
+## ⚙️ REGRA GLOBAL (2026-08-07, usuário): MONITORAR JANELA DE CONTEXTO de modelos locais e nuvem
+- **Regra:** o orquestrador deve **sempre monitorar a janela de contexto** dos modelos locais (4 llama-servers) E nuvem (opencode/omniroute) antes de estourar.
+- **Motivo:** evitar `overflow`/alucinação por estouro de contexto. Se estourar OCO alucinar, identificar o **motivo/circunstância de causa→efeito / ação→reação** e registrar a lição.
+- **ALOCAÇÃO KV E (aprovada):** bonsai 2.2 GiB (-c 9011) / ornith 0.9 (7372) / nanbeige 0.5 (2978) / lfm 0.2 (3276). Aplicado em start-all-models.sh (+open code.json). Backup `.bak-kvE`.
+- **Total 3.80 GiB / 4.1 livre** — margem 0.30. Se houver problema de contexto, atacar NO modelo que estourou (bonsai=infer ⚗️, ornith=orquestrador, nanbeige=qualidade, lfm=checks).
+- **Procedimento de monitor:** checar `/proc/<pid>/cmdline -c` real; watch `rocm-smi --showmeminfo` (VRAM do ctx); monitorar alucinação → correlacionar com tamanho do prompt no sesmo histó.
+- **Ta, é referência rápida de quem-atacar:** bonsai=max inferência/raciocínio; ornith=orquestrador; nan=svogos/qualidade; lfm=checks binárias.
+
+## 🔧 KV CACHE CORRIGIDA (2026-08-07) — alocação: bonsai 2.1 / ornith 0.7 / nanbeige 0.5 / lfm 0.3 GiB
+- **Aplicado em `start-all-models.sh`:** novas `-c` por slot: Bonsai **8601**, Ornith **5734**, Nanbeige **2978**, LFM 2048 (mantém). Backup `.bak-kvalloc`.
+- **Cálculo:** custo KV por token medido (B 131072, Orn 65536, Nan 90112, LFM 32768 B)/slot × 2 slots.
+- **Para valer:** reiniciar os llama-servers (parar/start stack via start-all-models.sh) — not noch; afeta inferência.
+- **v54 (2040/1180/UV60/TDP300, MD5 `8ab6f733`)** aplicado e persistido (sysfs+/etc+postboot+watchdog).
+- **PRÓXIMO:** decidir quando reiniciar stack p/ ativar o KV novo; testar v54 p/ ver se 2040 evita a perda de vídeo.
+
 [Metrics] Phase: 2 (contrato) | Route: COMPLEX/CRITICAL | Status: skipped (decisão do usuário — dump + SPEC pulados)
 [Metrics] Phase: 3 (plano) | Route: COMPLEX/CRITICAL | Status: skipped final (decisão do usuário: "pular plan") — 2 canceladas
 [Metrics] Phase: 4 (execução) | Route: COMPLEX/CRITICAL | Status: bin PRONTO via bash (upp set), aplicação sysfs PENDENTE (root) — 1 agente timeout, 1 cancelada
