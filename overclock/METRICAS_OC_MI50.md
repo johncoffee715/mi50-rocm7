@@ -67,3 +67,9 @@ ERROS amdgpu: nenhum (dmesg limpo)
 - **`pp_table_final_estavel_2100_1200.bin`** — MD5 `22430f05870975e3aee62503a85e113f`
 - SCLK 2100 / MCLK 1200 / TDP 350 / Thp150 / refs edge+VRAM / volt stock
 - ESTÁVEL em jogo com `perf_level=AUTO`. 2135/2150 = page fault+gfx timeout (descartado).
+
+## 🎮 Teste 4K max (2026-08-07) — v43 (2075/1300)
+- **SCLK 2060MHz real sustentado em 4K tudo max** — OC de núcleo validado em carga máxima.
+- **MCLK preso 350** em jogo GFX/display (limitação de workload de memória, não do perfil).
+- Freeze polígonos transitório (page fault + gfx timeout) → reset succeeded, recuperou (39min uptime).
+- MD5 v43: `f9655ecc`
