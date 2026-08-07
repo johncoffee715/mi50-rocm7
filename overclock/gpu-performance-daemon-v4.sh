@@ -77,7 +77,8 @@ while true; do
         if [ "$state" != "up" ]; then
             ramp_up
             state="up"
-            log "topo alcançado (load=${load}%) — SCLK=${SCLK_TARGET}"
+            echo "auto" > "$PERF" 2>/dev/null
+            log "topo alcançado (load=${load}%) — comutado p/ AUTO (jogo estável)"
         fi
         idle_count=0
     else

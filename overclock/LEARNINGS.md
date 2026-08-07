@@ -1,5 +1,11 @@
 # Learnings — Overclocking MI50 / Vega 20 (PP Tables)
 
+## 🚨 ROOT CAUSE REAL do OCP/beep: daemon (rampa) DESATIVADO — não o MCLK
+- **Fatos:** OCP (corte Vcore + beep) ocorreu com MCLK 1300 E com MCLK 1200. **Não é o MCLK.**
+- **Causa real:** o **daemon v4 (rampa gradual) estava INACTIVE**. Sem a rampa, a subida de corrente é abrupta → OCP/beep. O GOLDEN_RULES sempre disse: **daemon OBRIGATÓRIO**.
+- **O conflito que montamos:** daemon com `manual` congelava jogos (gfx timeout); desligar o daemon → OCP. **Solução: daemon com rampa gradual NA SUBIDA + comutar para `auto` no topo** (não ficar em manual).
+- **Ajuste necessário:** reativar daemon v4 (proteção anti-OCP) MAS modificá-lo para: rampa 0→8 em manual → no topo `auto` (jogo estável). Este é o fix que faltava.
+
 ## 🚨 OCP = beep/corte de Vcore no MCLK 1300 — teto seguro = 1200 (2026-08-07)
 - **MCLK 1300 (v44) em workload:** **corte de Vcore + beep** = OCP (OverCurrent Protection) do VRM/PSU — proteção de ENERGIA, não silício (diferente dos `gfx timeout`). Não loga no kernel.
 - **Limite físico:** MCLK acima de 1200 puxa corrente demais no transiente → VRM/PSU corta. **Teto seguro de memória = 1200** (validado sem OCP).
