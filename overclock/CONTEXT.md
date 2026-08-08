@@ -371,6 +371,14 @@ SCLK ≤2050–2064 · SOCCLK ≤971 · FCLK ≤1180 · MaxVolt ≤4950 · TDP �
 - **v54 (2040/1180/UV60/TDP300, MD5 `8ab6f733`)** aplicado e persistido (sysfs+/etc+postboot+watchdog).
 - **PRÓXIMO:** decidir quando reiniciar stack p/ ativar o KV novo; testar v54 p/ ver se 2040 evita a perda de vídeo.
 
+## 🔧 TDP 350W + REMOVE UNDERVOLT (2026-08-07) — PENDENTE DE APLICAÇÃO
+- **Causa:** durante inferência, GPU cortava VCore + beepava. Undervolt (MaxVoltageGfx=4410) insuficiente para carga pesada de inferência.
+- **Mudança:** TDP 300→350W, MaxVoltageGfx 4410→4650 (stock), ThotspotLimit 150→105 (stock).
+- **pp_table pronta:** `/tmp/pp_table_350w_noundervolt.bin` (SHA `7100b4a3...`). Config: SCLK 2040, MCLK 1180, TDP 350W, MaxVoltage 4650 (stock).
+- **Script de aplicação:** `/tmp/apply_350w_noundervolt.sh` — roda `sudo bash /tmp/apply_350w_noundervolt.sh`.
+- **Status:** ⚠️ PENDENTE — precisa de `sudo` para gravar no pp_table_active.bin + sysfs da GPU.
+- **Backup criado:** `/etc/mi50-oc/backup/pp_table_pre_350w_noundervolt_*.bin`.
+
 [Metrics] Phase: 2 (contrato) | Route: COMPLEX/CRITICAL | Status: skipped (decisão do usuário — dump + SPEC pulados)
 [Metrics] Phase: 3 (plano) | Route: COMPLEX/CRITICAL | Status: skipped final (decisão do usuário: "pular plan") — 2 canceladas
 [Metrics] Phase: 4 (execução) | Route: COMPLEX/CRITICAL | Status: bin PRONTO via bash (upp set), aplicação sysfs PENDENTE (root) — 1 agente timeout, 1 cancelada
